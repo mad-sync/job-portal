@@ -1,10 +1,24 @@
 import React from 'react'
-import { useParams, useLoaderData, Link } from 'react-router-dom';
+import { useParams, useLoaderData, Link, useNavigate } from 'react-router-dom';
+import { toast } from 'react-toastify';
 
 
-const JobPage = () => {
+const JobPage = ( {deleteJob}) => {
+    const navigate = useNavigate();
     const { id } = useParams();
     const job = useLoaderData();
+
+
+    const onDeleteClick = (jobId) => {
+        const confirm = window.confirm('Are you sure to delete the job posting ?')
+
+        if(!confirm) return;
+
+        deleteJob(jobId);
+        toast.success('Job deleted successfully')
+
+        navigate('/jobs')
+    }
 
   return (
     <>
@@ -34,8 +48,8 @@ const JobPage = () => {
             </div>
             <div className='w-full bg-white rounded-lg p-10 flex flex-col gap-4'>
                 <p className='text-2xl font-bold flex flex-col'>Manage job</p>
-                <Link to={`/jobs/edit/${id}`} className='flex justify-center items-center w-full h-[40px] bg-indigo-700 text-white rounded-full text-xl hover:bg-indigo-500'>Edit Job</Link>
-                <Link to="/delete" className='flex justify-center items-center w-full h-[40px] bg-red-700 text-white rounded-full text-xl hover:bg-red-500'>Delete Job</Link>
+                <Link to={`/edit-job/${id}`} className='flex justify-center items-center w-full h-[40px] bg-indigo-700 text-white rounded-full text-xl hover:bg-indigo-500'>Edit Job</Link>
+                <button onClick={() => onDeleteClick(job.id)} className='w-full h-[40px] bg-red-700 text-white rounded-full text-xl hover:bg-red-500'>Delete Job</button>
             </div>
             </div>
         </div>
